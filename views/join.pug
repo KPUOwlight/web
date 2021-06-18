@@ -13,12 +13,18 @@ block content
     .container-fluid
       .row
         .col-3
-          .list-group
-            a.list-group-item.list-group-item-action.font-weight-bold.text-center.pt-3(href='/', style="height: 60px;") 홈
-            a.list-group-item.list-group-item-action.font-weight-bold.text-center.pt-3(href='/logout', style="height: 60px;") 로그아웃
-            a.list-group-item.list-group-item-action.font-weight-bold.active.list-group-item-info.text-center.pt-3(href='/data', style="height: 60px;") 생활정보 열람
-            a.list-group-item.list-group-item-action.font-weight-bold.text-center.pt-3(href='/manage', style="height: 60px;") 관리자
-        .col-9
+
+        .col-6
+          .shadow.p-3.bg-white.rounded
+            form(action='/join' method='post')
+              .form-group
+                label 아이디
+                input.form-control(type='text' name='new_username' placeholder='Enter ID' required='')
+              .form-group
+                label 비밀번호
+                input.form-control(type='password' name='new_password' placeholder='Enter Password' required='')
+              button.btn.btn-outline-primary.btn-block(type='submit' value='Sign Up') 회원가입
+        .col-3
 
 
     script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js')

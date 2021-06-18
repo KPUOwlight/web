@@ -14,12 +14,22 @@ block content
       .row
         .col-3
           .list-group
-            a.list-group-item.list-group-item-action.font-weight-bold.text-center.pt-3(href='/', style="height: 60px;") 홈
+            a.list-group-item.list-group-item-action.active.list-group-item-primary.font-weight-bold.text-center.pt-3(href='/', style="height: 60px;") 홈
             a.list-group-item.list-group-item-action.font-weight-bold.text-center.pt-3(href='/logout', style="height: 60px;") 로그아웃
-            a.list-group-item.list-group-item-action.font-weight-bold.active.list-group-item-info.text-center.pt-3(href='/data', style="height: 60px;") 생활정보 열람
+            a.list-group-item.list-group-item-action.font-weight-bold.text-center.pt-3(href='/data', style="height: 60px;") 생활정보 열람
             a.list-group-item.list-group-item-action.font-weight-bold.text-center.pt-3(href='/manage', style="height: 60px;") 관리자
+            a.list-group-item.list-group-item-action.font-weight-bold.text-center.pt-3(style="height: 60px;") #{user_id}님 안녕하세요.
         .col-9
-
+          #carouselExampleSlidesOnly.carousel.slide(data-ride='carousel')
+            .carousel-inner
+              .carousel-item.active
+                img.d-block.w-100(src='lamp1.jpg' alt="First slide")
+                .carousel-caption.d-none.d-md-block
+                  h3.font-weight-bold.text-dark Owlight 데이터 제공 서비스
+              .carousel-item
+                img.d-block.w-100(src='lamp2.jpg' alt="Second slide")
+                .carousel-caption.d-none.d-md-block
+                  h3.font-weight-bold.text-dark Owlight 데이터 제공 서비스
 
     script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js')
     script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js')
