@@ -176,11 +176,13 @@ router.get('/login_fail', function(req, res, next) {
 });
 
 router.get('/data', function(req, res, next) {
-  res.render('data', { title: 'Express' });
+  //res.render('data', { title: 'Express' });
+  res.render('data', {user_id : passport.session.user_id});
 });
 
 router.get('/manage', function(req, res, next) {
-  res.render('manage', { title: 'Express' });
+  //res.render('manage', { title: 'Express' });
+  res.render('manage', {user_id : passport.session.user_id});
 });
 
 module.exports = router;
