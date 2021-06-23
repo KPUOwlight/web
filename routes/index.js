@@ -23,10 +23,11 @@ router.get('/', function(req, res, next) {
 });
 
 const connection = mysql.createConnection( {
-  host: 'localhost',
+  host: '13.125.177.193',
+  port: '3306',
   user: 'root',
-  password: '1234',
-  database: 'test1'
+  password: 'root',
+  database: 'test'
 });
 
 connection.connect();
@@ -40,7 +41,7 @@ passport.deserializeUser(function(id, done) {
   console.log("deserializeUser id ", id);
 
   var userinfo = "";
-  var sql = "SELECT * FROM test WHERE id=?";
+  var sql = "SELECT * FROM web_user WHERE id=?";
 
   connection.query(sql , [id], function (err, result) {
     if(err) console.log('mysql 에러');
@@ -71,14 +72,14 @@ router.get('/login', function(req, res, next) {
   console.log("userId : " + userId);
 });
 
-passport.use('local-join', new LocalStrategy({
+passport.use('join', new LocalStrategy({
   usernameField: 'new_username',
   passwordField: 'new_password'
 },
     function(new_username, new_password, done) {
-      console.log('local-join');
+      console.log('join');
 
-      var sql1 = "SELECT * FROM test WHERE id=?";
+      var sql1 = "SELECT * FROM web_user WHERE id=?";
 
       connection.query(sql1, [new_username], function (err, datas) {
         if(err) return done(err);
@@ -90,7 +91,7 @@ passport.use('local-join', new LocalStrategy({
         } else {
           console.log("DB 회원가입 무결성 통과");
 
-          var sql2 = "INSERT into test(id, pw) values(?,?)";
+          var sql2 = "INSERT into web_user(id, pw) values(?,?)";
 
           connection.query(sql2, [new_username, new_password], function (err, datas) {
             if (err) console.log('join mysql 에러');
@@ -103,14 +104,14 @@ passport.use('local-join', new LocalStrategy({
       })
     }));
 
-passport.use('local-login', new LocalStrategy({
+passport.use('login', new LocalStrategy({
       usernameField: 'username',
       passwordField: 'password'
     },
     function(username, password, done) {
       console.log(username, password, done);
 
-      var sql3 = "SELECT * FROM test WHERE id=? AND pw=?";
+      var sql3 = "SELECT * FROM web_user WHERE id=? AND pw=?";
       connection.query(sql3 , [username, password], function (err, result) {
         if(err)
           console.log('mysql 에러');
@@ -121,7 +122,8 @@ passport.use('local-login', new LocalStrategy({
           console.log("결과 없음");
 
           return done(null, false, { message: 'Incorrect' });
-        }else{
+        }
+        else{
           console.log(result);
 
           var json = JSON.stringify(result[0]);
@@ -158,14 +160,14 @@ router.get('/logout', function (req, res, next) {
 });
 
 router.post('/login',
-    passport.authenticate('local-login', {
+    passport.authenticate('login', {
       successRedirect: '/home_afterlogin',
       failureRedirect: '/login_fail',
       failureFlash: false }),
 );
 
 router.post('/join',
-    passport.authenticate('local-join', {
+    passport.authenticate('join', {
       successRedirect: '/home',
       failureRedirect: '/join_fail',
       failureFlash: false })
