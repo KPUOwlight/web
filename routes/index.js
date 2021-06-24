@@ -5,11 +5,11 @@ const LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require("express-session");
-const flash = require('connect-flash');
+//const flash = require('connect-flash');
 
 const mysql = require('mysql');
 
-const app = express();
+//const app = express();
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -129,6 +129,8 @@ passport.use('login', new LocalStrategy({
           var json = JSON.stringify(result[0]);
           var userinfo = JSON.parse(json);
 
+          console.log(userinfo);
+
           console.log("userinfo " + userinfo.id);
           console.log("userinfo " + userinfo.pw);
 
@@ -178,12 +180,71 @@ router.get('/login_fail', function(req, res, next) {
 });
 
 router.get('/data', function(req, res, next) {
-  //res.render('data', { title: 'Express' });
-  res.render('data', {user_id : passport.session.user_id});
+  let data = {
+    temp : this.temp1,
+    humi : this.humidi1,
+    dust : this.dust1,
+    battery : this.battery1
+  };
+
+  connection.query("SELECT temp FROM test3 ORDER BY time desc limit 1;", function (err, temp) {
+    if (err) throw err;
+
+    if(temp.length > 0) {
+      console.log(temp[0]);
+
+      data.temp = temp[0].temp;
+    }
+  })
+
+  connection.query("SELECT humi FROM test3 ORDER BY time desc limit 1;", function (err, humidi) {
+    if (err) throw err;
+
+    if(humidi.length > 0) {
+      console.log(humidi[0]);
+
+      data.humi = humidi[0].humi;
+    }
+  })
+
+  connection.query("SELECT dust FROM test3 ORDER BY time desc limit 1;", function (err, dust) {
+    if (err) throw err;
+
+    if(dust.length > 0) {
+      console.log(dust[0]);
+
+      data.dust = dust[0].dust;
+    }
+  })
+
+  connection.query("SELECT battery FROM test3 ORDER BY time desc limit 1;", function (err, battery) {
+    if (err) throw err;
+
+    if(battery.length > 0) {
+      console.log(battery[0]);
+
+      data.battery = battery[0].battery;
+    }
+
+    console.log(data);
+
+    res.render('data', {
+      user_id: passport.session.user_id,
+      temp_1: data.temp,
+      humidi_1: data.humi,
+      dust_1: data.dust,
+      battery_1: data.battery,
+      test: "testisok"});
+  })
 });
 
+/*
+router.post('/data', function(req, res, next) {
+
+});
+*/
+
 router.get('/manage', function(req, res, next) {
-  //res.render('manage', { title: 'Express' });
   res.render('manage', {user_id : passport.session.user_id});
 });
 
