@@ -26,7 +26,7 @@ const connection = mysql.createConnection( {
   host: '13.125.177.193',
   port: '3306',
   user: 'root',
-  password: 'root',
+  password: 'semonemo95',
   database: 'test'
 });
 
@@ -184,10 +184,12 @@ router.get('/data', function(req, res, next) {
     temp : this.temp1,
     humi : this.humidi1,
     dust : this.dust1,
-    battery : this.battery1
+    battery : this.battery1,
+    latitude : this.latitude,
+    longitude : this.longitude
   };
 
-  connection.query("SELECT temp FROM test3 ORDER BY time desc limit 1;", function (err, temp) {
+  connection.query("SELECT temp FROM test4 ORDER BY time desc limit 1;", function (err, temp) {
     if (err) throw err;
 
     if(temp.length > 0) {
@@ -197,7 +199,7 @@ router.get('/data', function(req, res, next) {
     }
   })
 
-  connection.query("SELECT humi FROM test3 ORDER BY time desc limit 1;", function (err, humidi) {
+  connection.query("SELECT humi FROM test4 ORDER BY time desc limit 1;", function (err, humidi) {
     if (err) throw err;
 
     if(humidi.length > 0) {
@@ -207,7 +209,7 @@ router.get('/data', function(req, res, next) {
     }
   })
 
-  connection.query("SELECT dust FROM test3 ORDER BY time desc limit 1;", function (err, dust) {
+  connection.query("SELECT dust FROM test4 ORDER BY time desc limit 1;", function (err, dust) {
     if (err) throw err;
 
     if(dust.length > 0) {
@@ -217,13 +219,33 @@ router.get('/data', function(req, res, next) {
     }
   })
 
-  connection.query("SELECT battery FROM test3 ORDER BY time desc limit 1;", function (err, battery) {
+  connection.query("SELECT battery FROM test4 ORDER BY time desc limit 1;", function (err, battery) {
     if (err) throw err;
 
-    if(battery.length > 0) {
+    if (battery.length > 0) {
       console.log(battery[0]);
 
       data.battery = battery[0].battery;
+    }
+  })
+
+  connection.query("SELECT latitude FROM test4 ORDER BY time desc limit 1;", function (err, latitude) {
+    if (err) throw err;
+
+    if (latitude.length > 0) {
+      console.log(latitude[0]);
+
+      data.latitude = latitude[0].latitude;
+    }
+  })
+
+  connection.query("SELECT longitude FROM test4 ORDER BY time desc limit 1;", function (err, longitude) {
+    if (err) throw err;
+
+    if (longitude.length > 0) {
+      console.log(longitude[0]);
+
+      data.longitude = longitude[0].longitude;
     }
 
     console.log(data);
@@ -234,7 +256,9 @@ router.get('/data', function(req, res, next) {
       humidi_1: data.humi,
       dust_1: data.dust,
       battery_1: data.battery,
-      test: "testisok"});
+      latitude_1: data.latitude,
+      longitude_1: data.longitude,
+      test: "test_is_ok"});
   })
 });
 
